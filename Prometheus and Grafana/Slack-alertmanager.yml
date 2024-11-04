@@ -1,0 +1,41 @@
+global:
+  slack_api_url: 'https://hooks.slack.com/services/XXXXXXXX'  # Replace with your actual Slack webhook URL
+
+route:
+  receiver: 'slack-alerts'
+
+receivers:
+  - name: 'slack-alerts'
+    slack_configs:
+      - channel: '#alerts'  # Replace with your Slack channel (e.g., '#alerts')
+        send_resolved: true
+        title: "{{ .CommonAnnotations.summary }}"  # Customize as needed
+        text: "{{ .CommonAnnotations.description }}"  # Customize as needed
+
+inhibit_rules:
+  - source_match:
+      alertname: 'InstanceDown'        # Alert that signifies an instance is down
+    target_match:
+      severity: 'warning'              # Alerts of warning severity will be suppressed
+    equal: ['instance', 'job']
+
+
+#################################
+
+# you typically define an alert rule in the prometheus.yml configuration 
+# that checks for instance availability.
+# This rule generates an InstanceDown alert if an instance fails health checks. 
+# For example:
+
+groups:
+  - name: InstanceAlerts
+    rules:
+      - alert: InstanceDown
+        expr: up == 0   # This means the instance is unreachable or down
+        for: 5m         # Trigger the alert if the instance is down for more than 5 minutes
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} is down"
+          description: "Instance {{ $labels.instance }} has been unreachable for more than 5 minutes."
+

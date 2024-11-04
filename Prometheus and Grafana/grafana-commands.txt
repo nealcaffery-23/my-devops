@@ -1,0 +1,42 @@
+> helm repo add grafana https://grafana.github.io/helmcharts
+
+# to update the repo
+
+> helm repo update
+
+# to install grafana
+
+> helm install grafana stable/grafana
+
+# To see helm releases installed
+
+> helm list
+
+# To see pod and services
+
+> kubectl get all
+
+(This will show all pods, services, deployment, replicasets of prometheus and grafana)
+
+# Now to access grafana UI , lets expose the service of grafana
+
+> kubectl expose service grafana --type=Nodeport --targetport=3000 --name=grafana-ext
+
+# Now get the node port and use node IP to access grafana UI page
+
+> kubectl get service
+
+# To login gets creds by running below cmds
+
+> kubectl get secret --namespace default grafana -o yaml
+
+# De-crypt those credentials
+
+> echo "<username>" | openssl base64 -d ; echo
+
+> echo "<password>" | openssl base64 -d ; echo
+
+# Now with these credentials login to grafana UI
+
+# select "Datasources" and enter URL of prometheus with port and save & Test it.
+

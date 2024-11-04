@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'ENVIRONMENT_NAME', choices: ['dev', 'qa'], description: 'Select the environment')
+    }
+
+    stages {
+        stage('Terraform Init') {
+            steps {
+                script {
+                    // Navigate to the selected environment folder
+                    dir("Terraform/${params.ENVIRONMENT_NAME}") {
+                        // Initialize Terraform with credentials
+                        withCredentials([
+                            string(credentialsId: 'your-client-id-credential-id', variable: 'CLIENT_ID'),
+                            string(credentialsId: 'your-client-secret-credential-id', variable: 'CLIENT_SECRET'),
+                            string(credentialsId: 'your-tenant-id-credential-id', variable: 'TENANT_ID'),
+                            string(credentialsId: 'your-subscription-id-credential-id', variable: 'SUBSCRIPTION_ID')
+                        ]) {
+                            // Set the required environment variables for Terraform
+                            env.TF_VAR_client_id = CLIENT_ID
+                            env.TF_VAR_client_secret = CLIENT_SECRET
+                            env.TF_VAR_tenant_id = TENANT_ID
+                            env.TF_VAR_subscription_id = SUBSCRIPTION_ID
+
+                            // Initialize Terraform
+                            sh 'terraform init'
+                        }
+                    }
+                }
+            }
+        }
+        stage('Terraform Plan') {
+            steps {
+                script {
+                    dir("Terraform/${params.ENVIRONMENT_NAME}") {
+                        // Run Terraform Plan
+                        sh 'terraform plan'
+                    }
+                }
+            }
+        }
+        stage('Terraform Apply') {
+            steps {
+                script {
+                    dir("Terraform/${params.ENVIRONMENT_NAME}") {
+                        // Run Terraform Apply (optional: add -auto-approve for automation)
+                        sh 'terraform apply -auto-approve'
+                    }
+                }
+            }
+        }
+    }
+}
