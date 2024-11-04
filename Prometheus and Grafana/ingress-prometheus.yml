@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monitoring-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: prometheus.example.com  # Replace with your DNS
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus-service  # Name of Prometheus service
+                port:
+                  number: 80              # Port Prometheus is exposed on
+    - host: grafana.example.com      # Replace with your DNS
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana-service     # Name of Grafana service
+                port:
+                  number: 80              # Port Grafana is exposed on
