@@ -1,0 +1,32 @@
+# Go to "https://prometheus.io/download/"
+
+# Download the required prometheus components -> select the component & copy link address
+
+# For example : node exporter -> copy link as
+
+> wget https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.darwin-amd64.tar.gz
+
+> tar xvfz node_exporter-1.0.0.tar.gz
+
+# navigate to extracted folder and run 
+
+> ./node_exporter
+
+# you will see "listening on port"
+
+# Access the page with node IP and that port. If the page is not accessible then execute firewall command
+
+> sudo firewall-cmd --permanent --zone=public --addport=9100/tcp
+
+> sudo firewall-cmd --reload
+
+# The page will work
+
+# To update alerts via Slack, download alert_manager component and untar it
+
+> cat alertmanager.yml
+
+# There will be receivers content inside the file.
+
+
+

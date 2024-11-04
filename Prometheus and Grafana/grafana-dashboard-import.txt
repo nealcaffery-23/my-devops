@@ -1,0 +1,10 @@
+# In grafana UI -> click on ( + ) icon on left and select 'import'
+
+# There is official page for grafana dashboards with Revision number
+
+url: grafana.com/grafana/dashboards/6417
+
+# you can select any dashboard that you like
+
+# Give that revision number and select the Datasource 'prometheus' and click -> import the dashboard
+

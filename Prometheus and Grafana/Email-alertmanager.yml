@@ -1,0 +1,42 @@
+global:
+  smtp_smarthost: 'smtp.example.com:587'  # Replace with your SMTP server and port
+  smtp_from: 'your-email@example.com'     # Replace with your "from" email address
+  smtp_auth_username: 'your-email@example.com'  # Replace with your email
+  smtp_auth_password: 'your-email-password'     # Replace with your email password
+
+route:
+  receiver: 'email-alerts'
+
+receivers:
+  - name: 'email-alerts'
+    email_configs:
+      - to: 'alert-recipient@example.com'  # Replace with the recipient's email address
+        send_resolved: true               # Set to true to get notifications when alerts are resolved
+
+inhibit_rules:
+  - source_match:
+      alertname: 'InstanceDownWarning'            # Alert that signifies an instance is down
+    target_match:
+      severity: 'warning'                  # Alerts of warning severity will be suppressed
+    equal: ['instance', 'job']
+    
+
+#################################
+
+# you typically define an alert rule in the prometheus.yml configuration 
+# that checks for instance availability.
+# This rule generates an InstanceDown alert if an instance fails health checks. 
+# For example:
+
+groups:
+  - name: InstanceAlerts
+    rules:
+      - alert: InstanceDownWarning
+        expr: up == 0
+        for: 1m                             # Trigger warning if down for more than 1 minute
+        labels:
+          severity: warning
+        annotations:
+          summary: "Instance {{ $labels.instance }} is down (warning)"
+          description: "Instance {{ $labels.instance }} has been unreachable for more than 1 minute."
+          

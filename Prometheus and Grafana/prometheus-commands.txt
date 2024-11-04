@@ -1,0 +1,31 @@
+>  helm repo add prometheus-community https://prometheus-community.github.io/helmcharts
+
+# to search repo:
+
+> helm search repo prometheus
+
+# to update:
+
+> helm repo update
+
+#  to install:
+
+> helm install prometheus prometheus-community/helmcharts
+
+# once installed , validate with below cmd:
+
+> kubectl get all
+
+# check services:
+
+> kubectl get services
+
+( you will see services with clusterIP)
+
+# Lets expose the service of prometheus server
+
+> kubectl expose service prometheus-server --type=Nodeport --targetport=9090 --name=prometheus-server-ext
+
+(Now if you check service of prometheus-server, you will see nodeport IP with port range of 30000 - 32767)
+
+# you can access prometheus UI with node ip and node port
