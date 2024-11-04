@@ -1,0 +1,26 @@
+---
+- name: Example of using environment variables
+  hosts: localhost
+
+  tasks:
+    - name: Set environment variable for a task
+      environment:
+        APP_ENV: "development"   # Define an environment variable for this task
+        APP_PORT: "8080"         # Another environment variable
+      command: echo "Running in environment: $APP_ENV on port $APP_PORT"
+
+
+---
+- name: Example of global environment variables
+  hosts: localhost
+
+  environment:
+    APP_ENV: "production"       # Global environment variable
+    APP_PORT: "8080"            # Another global environment variable
+
+  tasks:
+    - name: Print application environment
+      command: echo "Running in environment: $APP_ENV on port $APP_PORT"
+
+    - name: Start the application
+      command: ./start_app --env $APP_ENV --port $APP_PORT

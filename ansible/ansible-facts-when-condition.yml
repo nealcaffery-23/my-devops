@@ -1,0 +1,19 @@
+- name: Example of using when with Ansible facts
+  hosts: all
+
+  tasks:
+    - name: Check if the OS is Ubuntu
+      debug:
+        msg: "This system is running Ubuntu."
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Install Apache on RedHat-based systems
+      yum:
+        name: httpd
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Print a message if the system has more than 4 GB of memory
+      debug:
+        msg: "This system has more than 4 GB of RAM."
+      when: ansible_facts['memtotal_mb'] > 4096

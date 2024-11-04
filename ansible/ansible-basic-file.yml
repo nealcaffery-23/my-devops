@@ -1,0 +1,24 @@
+---
+- name: Install nginx
+  hosts: all
+  become: true
+  tasks:
+    - name: nginx app install and update cache
+      apt:
+        name: nginx
+        update-cache: yes
+        state: present
+
+    - name: install multiple apps
+      apt:
+        name:
+          - curl
+          - vim
+          - git
+        state: present
+
+    - name: upgrade nginx
+      apt:
+        name: nginx
+        upgrade: dist
+
