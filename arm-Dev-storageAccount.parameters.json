@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageAccountSKU": {
-            "value": "standard_LRS"
+            "value": "Standard_LRS"
         }
     }
 }
