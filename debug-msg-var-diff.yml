@@ -1,0 +1,14 @@
+- name: Example of using msg and var in debug
+  hosts: localhost
+  vars:
+    app_name: "myapp"
+    app_port: 8080
+
+  tasks:
+    - name: Print a custom message with app details
+      debug:
+        msg: "Application {{ app_name }} is running on port {{ app_port }}"
+
+    - name: Print only the value of app_name
+      debug:
+        var: app_name

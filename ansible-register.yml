@@ -1,0 +1,49 @@
+---
+- name: example of register playbook
+  hosts: all
+  remote_users: neal-dev
+  become: true
+  tasks:
+    - name: check hostname
+      command: hostname
+      register: server-name
+
+    -name: add server in file
+     copy:
+       content: {{server-name.stdout}}
+       dest: /etc/ansible/hosts
+
+---
+- name: condition based register
+  hosts: web_servers
+  become: true
+  tasks:
+    - name: check directory
+      stat:
+        path: /opt/sysadmin/devops
+      register: folder-name
+
+    - name: create if not present
+      file:
+        path: /opt/sysadmin/devops
+        state: directory
+      when: not foldername.stat.exists
+
+
+---
+- name: Check and update directory permissions
+  hosts: all
+  tasks:
+    - name: Check permissions of /var/log/myapp
+      stat:
+        path: /var/log/myapp
+      register: log_dir
+
+    - name: Update permissions of /var/log/myapp if needed
+      file:
+        path: /var/log/myapp
+        mode: '0755'
+        state: directory
+      when: log_dir.stat.mode != '0755'  # Changes permissions only if they are different
+
+

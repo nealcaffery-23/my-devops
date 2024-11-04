@@ -1,0 +1,62 @@
+---
+- name: Example of scalar variables
+  hosts: localhost
+  vars:
+    server_name: "example.com"  # String
+    server_port: 8080            # Integer
+    debug_mode: true              # Boolean
+
+  tasks:
+    - name: Display scalar variables
+      debug:
+        msg:
+          - "Server Name: {{ server_name }}"
+          - "Server Port: {{ server_port }}"
+          - "Debug Mode: {{ debug_mode }}"
+
+---
+- name: Example of list variables
+  hosts: localhost
+  vars:
+    users:
+      - alice
+      - bob
+      - charlie
+
+  tasks:
+    - name: Display list of users
+      debug:
+        msg: "User: {{ item }}"
+      loop: "{{ users }}"
+
+
+---
+- name: Example of dictionary variables
+  hosts: localhost
+  vars:
+    db_config:
+      host: "localhost"
+      port: 5432
+      user: "admin"
+      password: "secret"
+
+  tasks:
+    - name: Display database configuration
+      debug:
+        msg: "Database Host: {{ db_config.host }}, Port: {{ db_config.port }}"
+
+---
+- name: Example of combined variables
+  hosts: localhost
+  vars:
+    web_servers:
+      - name: "web1"
+        ip: "192.168.1.10"
+      - name: "web2"
+        ip: "192.168.1.11"
+
+  tasks:
+    - name: Display web server information
+      debug:
+        msg: "Web Server: {{ item.name }}, IP: {{ item.ip }}"
+      loop: "{{ web_servers }}"

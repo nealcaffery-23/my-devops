@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountSKU": {
+       "type": "string",
+       "metadata": {
+          "description": "choose the tier"
+       },
+       "defaultValue": "standard_LRS",
+       "allowedValues": [
+          "standard_LRS",
+          "standard_GRS"
+        ]
+      }
+    },
+   "functions": [],
+   "variables": {
+       "resourceName": "Dev-SA"
+   },
+   "resources": [
+      {
+         "name": "[variables('resourceName')]",
+         "location": "[resourceGroup().location]",
+         "sku": {
+            "tier": "[parameters('storageAccountSKU')]"
+         }
+      }
+   ],
+   "outputs": {}
+  }
