@@ -1,0 +1,28 @@
+apiversion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-app-ingress
+  annotations: nginx-ingress-kubernetes.io/rewrite-target: /
+  annotations: nginx-ingress-kubernetes.io/ssl-redirect: "true"
+  annotations: nginx-ingress-kubernetes.io/proxy-body-size: "10m"
+spec:
+  rules:
+    - host: my.app.example.com
+      https:
+        paths:
+        - path: /images
+          pathType: prefix
+          backend:
+            service:
+              name: image-service
+              port:
+                number: 80
+        - path: /videos
+          pathType: Prefix
+          backend:
+            service:
+              name: video-service
+              port:
+                number: 80
+                      
+           
