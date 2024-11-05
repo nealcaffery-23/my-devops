@@ -1,0 +1,34 @@
+> How to Create a Conditional Access Policy
+
+> Sign in to the Azure AD portal.
+
+Go to Security > Conditional Access.
+
+> Select New Policy, name your policy, 
+and configure the Assignments (e.g., users, applications, conditions).
+
+> Under Access Controls, configure Grant or Session controls.
+
+> Enable the Policy: 
+
+Make sure to test policies before full deployment, especially if they could impact critical applications or large groups.
+Considerations
+
+> Licensing: 
+
+Conditional Access requires Azure AD Premium P1 or P2 licenses, 
+with advanced risk-based controls available in P2.
+
+> Testing Policies: 
+
+Improperly configured policies can inadvertently lock users out, so testing is crucial.
+
+> Monitoring and Insights: 
+
+Regularly monitor the impact of Conditional Access policies with sign-in logs and reports to fine-tune settings.
+
+Benefits of Conditional Access
+
+Adaptive Security:
+Compliance Support: 
+Minimized User Friction:

@@ -1,0 +1,34 @@
+Membership Type:  
+
+Assigned:
+   - manually we can add "owners" & "members"
+Dynamic User:
+   - We can use dynamic query to add members dynamically
+   - by adding "configure rules"  
+   - based on 'city', 'job title' ,'mail', 'location' etc and its value
+
+can be added to <group> ex: security group
+
+Owners - always manually
+
+
+via Powershell:
+
+# connect to Azure AD tenant
+
+> connect AzureAD
+
+# To list AD users of your tenant. The below command will list all users with objectId & user principal
+
+> Get-AzureADUser
+
+# To list particular users
+
+> Get-AzureADUser -objectId <******> | fl
+
+# To update particular attribute of the user
+
+> set-AzureADUser -objectId <*****> -City "delhi"
+
+
+   
