@@ -1,0 +1,129 @@
+Azure AKS: Kubernetes Cluster
+
+https://www.youtube.com/watch?v=YlR9AkDJMMA&list=PL9aNQqB-xjbAjGjkAKuydrYa8ZDM4TcI7
+
+___________
+
+Install ARO video: ( open shift kubernetes ) 
+
+https://www.youtube.com/watch?v=sGWRpuRPFCg
+
+It has document link as well
+____________
+
+Advances cluster management in ARO: ( open shift kubernetes ) 
+
+https://www.youtube.com/watch?v=03lNS3Qujo0
+
+using this you can create another cluster in AWS with Openshift console
+
+______________
+
+https://www.youtube.com/watch?v=OTC1SLMjKaA   
+
+Insights monitoring of your cluster in Openshift via Azure portal.( open shift kubernetes ) 
+
+______________
+
+https://www.youtube.com/watch?v=Wp6BE6HoDNA
+
+Azure active directory: user creation and app registration ( open shift kubernetes ) 
+
+______________
+
+https://www.youtube.com/watch?v=i5aALhhXDwc
+
+AKS kubernetes via terraform
+
+_______________
+
+Azure virtual Network:
+
+https://www.youtube.com/watch?v=a-Irjw7bL7w
+
+____________________
+
+Azure storage:
+
+https://www.youtube.com/watch?v=v3vbwdDRsbE
+
+
+_____________________
+
+Azure VM:
+
+https://www.youtube.com/watch?v=ZAJwVLaTnOM
+
+______________________
+
+
+Azure VPN gateway:
+
+https://www.youtube.com/watch?v=Gb3YE-0gBWQ
+
+point to site VPN:
+
+https://www.youtube.com/watch?v=Z_YjuTt6CXw
+
+site to site VPN:
+
+https://www.youtube.com/watch?v=i4Ph4n7v3WQ
+
+_________________
+
+Azure express gateway:
+
+https://www.youtube.com/watch?v=e22yXlP5d-c
+
+_______________________
+
+Azure Vnet peering:
+
+https://www.youtube.com/watch?v=yQN_-k07bvs
+
+___________________
+
+Azure App gateway complete steps:
+
+https://www.youtube.com/watch?v=DjNPHetdlQo
+
+App gateway multisite:
+
+https://www.youtube.com/watch?v=X-4KSoe9Kt8
+
+____________________
+
+prometheus:
+
+https://www.youtube.com/playlist?list=PLVx1qovxj-anCTn6um3BDsoHnIr0O2tz3
+
+__________________________
+
+
+Azure front door:
+
+https://www.youtube.com/watch?v=CRWWhY1tx0o&t=836s
+
+__________________________
+
+Azure Traffic manager:
+
+https://www.youtube.com/watch?v=aPNa7Axulhg
+
+__________________________
+
+Azure ARM template:
+
+https://www.youtube.com/watch?v=pHZDkJxd-wE
+
+Template deployment parametrization:
+
+https://www.youtube.com/watch?v=A3OtNevzXaA&list=PLGjZwEtPN7j8_kgw92LHBrry2gnVc3NXQ&index=2
+
+____________________
+
+Azure Multifactor Authentication:
+
+https://www.youtube.com/watch?v=mrLfFiBbXl0
+
+

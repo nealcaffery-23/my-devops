@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: statefulset
+metadata:
+  name: redis-statefulset
+    labels:
+      app: redis
+spec:
+  service: "redis-svc"
+  replicas: 2
+  template:
+    matchLabels:
+      app: redis
+  selector:
+    metadata:
+      labels:    
+        app: redis
+    spec:
+      containers:
+      - name: redis-container
+        image: redis:latest
+        ports:
+        -  containerPort: 6379
+        volumeMounts:
+        - name: redis-volume
+          mountPath: /data
+VolumeMountTemplate:
+- metadata:
+    name: redis-data
+  spec:
+    accessModes:
+    -  ReadWriteOnly     
+    resources:
+      requests:
+        storage: 1Gi
+                
+

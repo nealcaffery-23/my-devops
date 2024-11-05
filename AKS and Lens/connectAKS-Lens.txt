@@ -1,0 +1,38 @@
+To connect Lens to your Azure Kubernetes Service (AKS) cluster, you'll need to follow a few steps, as it doesn't connect automatically. Here’s how to do it:
+
+1. Install Lens
+If you haven’t already, download and install Lens from the official website( https://k8slens.dev/)
+
+2. Configure Access to Your AKS Cluster
+Before you can connect Lens to your AKS cluster, you need to ensure you have the appropriate kubeconfig file set up.
+Here’s how to do that:
+
+Open Azure Cloud Shell or your local terminal where you have the Azure CLI installed.
+
+Run the following command to configure your kubeconfig to access the AKS cluster:
+
+(az aks get-credentials --resource-group <your-resource-group> --name <your-aks-cluster-name>  )
+
+Replace <your-resource-group> with the name of your resource group and <your-aks-cluster-name> with the name of your AKS cluster.
+This command updates your local kubeconfig file with the credentials and context for your AKS cluster.
+
+3. Add AKS Cluster to Lens
+Once you have the kubeconfig configured, you can add the cluster to Lens:
+
+Open Lens.
+
+Click on the "Add Cluster" button or the "+" icon in the left-hand navigation.
+
+Choose the option to "Import existing kubeconfig".
+
+Lens should automatically detect the kubeconfig from your default kubeconfig file (~/.kube/config). If it doesn't, you can manually select the kubeconfig file.
+
+After selecting the correct context for your AKS cluster, click "Add Cluster".
+
+4. Verify the Connection
+Once added, you should see your AKS cluster listed in Lens. Click on it to verify that you can access your cluster resources, such as pods, services, and deployments.
+
+Troubleshooting
+If you encounter any issues connecting, ensure that your Azure CLI is authenticated and that you have the right permissions to access the AKS cluster.
+You can also check your kubeconfig file for correct context entries by running kubectl config get-contexts.
+With these steps, you should be able to connect Lens to your AKS cluster and manage your Kubernetes resources effectively!

@@ -1,0 +1,50 @@
+> How to Enable Azure MFA:
+
+> User-Based MFA:
+
+In the Azure AD portal, go to Users, select the user(s), and 
+choose Multi-Factor Authentication to enable it for specific users.
+
+> Conditional Access MFA: 
+
+Navigate to Azure AD > Security > Conditional Access to create policies that enforce MFA based on specific conditions.
+
+> Key Features of Azure MFA:
+
+> Multiple Verification Methods:
+
+Microsoft Authenticator App: Users receive a notification in the mobile app to approve sign-ins.
+Text Message (SMS): A one-time code is sent via SMS to the user's registered phone.
+Phone Call: Users receive an automated call and are prompted to verify by pressing a key.
+Hardware Token (FIDO2 keys): Allows authentication with a physical security key (e.g., YubiKey).
+Flexible Configuration:
+
+> User-based MFA: 
+
+Enforce MFA at the individual user level.
+
+> Conditional Access Policies: 
+
+Define when and where MFA is required based on conditions, such as device type, location, risk level, or specific apps. For example, you might enforce MFA only for users outside your corporate network.
+
+> Self-Service MFA Registration:
+
+Users are prompted to register for MFA during sign-in. 
+They can configure multiple methods (e.g., phone, app) to use as backups 
+in case one method is unavailable.
+
+> Enhanced Security with Conditional Access:
+
+Azure AD Conditional Access can combine Azure MFA with policies 
+that enforce MFA for risky sign-ins 
+(e.g., from unusual locations or unknown devices) or 
+block access altogether under specific conditions.
+
+> Risk-Based Authentication:
+
+Available with Azure AD Identity Protection, 
+this feature assesses sign-in risk based on behavioral analysis (such as unusual sign-in locations or IP addresses) and can prompt users for MFA if risks are detected.
+
+> Block Legacy Authentication: 
+
+Block sign-ins using legacy protocols (e.g., POP, IMAP) that don't support MFA, which are common attack vectors.

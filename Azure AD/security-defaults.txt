@@ -1,0 +1,35 @@
+How to Enable Security Defaults: ( Free Feature )
+
+-> Go to Azure AD > Properties > Manage Security Defaults.
+
+Toggle Enable Security Defaults to "Yes" and save.
+
+Key Features of Security Defaults:
+
+> Multi-Factor Authentication (MFA):
+
+Enforces MFA for all users, especially administrators and privileged roles, 
+helping to prevent unauthorized access in case of compromised credentials.
+Users are required to register for MFA, which typically involves the Microsoft Authenticator app
+or phone-based verification.
+
+> Blocking Legacy Authentication:
+
+Disables access from legacy authentication protocols (like POP, IMAP, SMTP) that don’t support MFA.
+Legacy authentication is more vulnerable to attacks 
+and is often used by attackers to gain unauthorized access to accounts.
+
+> Administrator Protection:
+
+Applies stricter policies to administrator accounts by requiring MFA 
+and ensuring these accounts are protected with additional layers of security.
+
+> User Registration for MFA:
+
+Encourages or enforces all users to set up MFA during their first sign-in, 
+ensuring that even if the organization grows, new users are secured.
+
+> Self-Service Password Reset (SSPR):
+
+For organizations with Azure AD Premium licenses, 
+Security Defaults can help enforce SSPR for enhanced user self-management.
