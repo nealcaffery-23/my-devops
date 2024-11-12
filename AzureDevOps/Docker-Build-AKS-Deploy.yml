@@ -1,0 +1,93 @@
+trigger:
+  branches:
+    include:
+      - dev
+      - qa
+      - staging
+      - prod
+
+parameters:
+  - name: environment
+    displayName: "Select environment"
+    type: string
+    default: 'dev'
+    values:
+      - dev
+      - qa
+      - staging
+      - prod
+
+variables:
+  acrName: 'myacr.azurecr.io'         # Replace with your ACR name
+  projectName: 'myproject'            # Replace with your project name
+  buildImageTag: $(Build.BuildId)    # Dynamically set the image tag for build stage
+
+stages:
+  - stage: Checkout
+    displayName: "Checkout Code"
+    jobs:
+      - job: CheckoutCode
+        displayName: "Checkout Code from Repository"
+        steps:
+          - checkout: self  # Checkout code from the repository
+
+  - stage: SetImageTag
+    displayName: "Set Docker Image Tag"
+    jobs:
+      - job: SetDockerTag
+        displayName: "Set Docker Image Tag"
+        steps:
+          - script: |
+              echo "##vso[task.setvariable variable=buildImageTag;isOutput=true]$(environment)-$(Build.BuildId)"
+            displayName: "Set Docker Image Tag"
+
+  - stage: Build
+    displayName: "Build Docker Image"
+    dependsOn: SetImageTag  # Ensure that SetImageTag stage runs before this
+    jobs:
+      - job: BuildImage
+        displayName: "Build Docker Image"
+        steps:
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'ACR-Service-Connection'  # Replace with your ACR service connection name
+              repository: '$(acrName)/$(projectName)'     # Use projectName instead of imageName
+              command: 'build'
+              Dockerfile: 'Dockerfile'
+              tags: $(buildImageTag)
+
+  - stage: Push
+    displayName: "Push Docker Image to ACR"
+    dependsOn: Build  # Ensure that Build stage runs before this
+    jobs:
+      - job: PushImage
+        displayName: "Push Docker Image to ACR"
+        steps:
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'ACR-Service-Connection'  # Replace with your ACR service connection name
+              repository: '$(acrName)/$(projectName)'     # Use projectName instead of imageName
+              command: 'push'
+              tags: $(buildImageTag)
+
+  - stage: Deploy
+    displayName: "Deploy to Kubernetes"
+    dependsOn: Push  # Ensure that Push stage runs before this
+    jobs:
+      - deployment: DeployToK8s
+        environment: 'Kubernetes'
+        variables:
+          deployImageTag: $[ dependencies.Build.outputs['BuildImage.buildImageTag'] ]
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: KubernetesManifest@0
+                  inputs:
+                    connectionType: 'AzureRM'  # Authenticate using Azure Resource Manager
+                    azureSubscription: 'Azure Service Connection for AKS'  # The name of the Azure service connection
+                    action: 'deploy'
+                    manifests: '$(Pipeline.Workspace)/deployment.yml'
+                    containers: |
+                      - name: $(projectName)-container  # Use projectName for container name
+                        image: $(acrName)/$(projectName):$(deployImageTag)  # Use deployImageTag for image name
