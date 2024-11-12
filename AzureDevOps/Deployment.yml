@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $(projectName)-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: $(projectName)
+  template:
+    metadata:
+      labels:
+        app: $(projectName)
+    spec:
+      containers:
+        - name: $(projectName)-container  # Container name based on project name
+          image: $(acrName)/$(projectName):$(deployImageTag)  # Use deployImageTag for image name
+          ports:
+            - containerPort: 80
