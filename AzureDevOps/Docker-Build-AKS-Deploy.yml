@@ -20,7 +20,6 @@ parameters:
 variables:
   acrName: 'myacr.azurecr.io'         # Replace with your ACR name
   projectName: 'myproject'            # Replace with your project name
-  buildImageTag: $(Build.BuildId)    # Dynamically set the image tag for build stage
 
 stages:
   - stage: Checkout
