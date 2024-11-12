@@ -1,0 +1,94 @@
+Steps to Achieve the Same Setup in Classic Pipeline:
+# Create the Pipeline:
+
+Go to Pipelines > Create Pipeline.
+Select Classic Editor for the pipeline creation method.
+
+# Trigger:
+
+For branch triggers, go to the Triggers tab.
+In the Build Triggers section, choose Continuous Integration and specify the branches (e.g., dev, qa, staging, prod).
+Stages and Jobs: In Classic Pipelines, stages and jobs are defined visually.
+
+# Stage 1: Checkout Code:
+
+Add a job to the first stage (name it "Checkout").
+Use the Checkout task to pull the code from your repository.
+
+# Stage 2: Set Docker Image Tag:
+
+Add a script task to set the buildImageTag variable dynamically.
+In the script task, add the following command to dynamically set the image tag:
+
+>  echo "##vso[task.setvariable variable=buildImageTag;isOutput=true]$(Build.SourceBranchName)-$(Build.BuildId)"
+
+This command sets the buildImageTag variable with the format $(environment)-$(Build.BuildId).
+
+# Stage 3: Build Docker Image:
+
+Add a Docker task to build the image.
+In the Docker task, set the following:
+
+Command: Build
+
+Dockerfile: Path to your Dockerfile
+
+Repository: $(acrName)/$(projectName)
+
+Tags: $(buildImageTag)
+
+This task will build the Docker image and tag it with the dynamic tag defined earlier.
+
+# Stage 4: Push Docker Image to ACR:
+
+Add another Docker task to push the image to Azure Container Registry (ACR).
+In the Docker task, set the following:
+
+Command: Push
+
+Repository: $(acrName)/$(projectName)
+
+Tags: $(buildImageTag)
+
+This will push the built image to your ACR.
+
+# Stage 5: Deploy to Kubernetes:
+
+Add a Kubernetes task (usually KubernetesManifest task).
+
+Set the Kubernetes connection and action to Deploy.
+
+Specify the manifest file (deployment.yml).
+
+In the containers section, set:
+
+>     - name: $(projectName)-container
+        image: $(acrName)/$(projectName):$(buildImageTag)
+
+This deploys the image to your AKS cluster using the tag set earlier.
+
+Summary of Tasks in Classic Pipeline:
+
+Checkout: Pull code from repository.
+
+Set Docker Image Tag: Run a script to set the buildImageTag variable dynamically using the format $(environment)-$(Build.BuildId).
+
+Build Docker Image: Use the Docker task to build the image with the dynamic tag.
+
+Push Docker Image to ACR: Push the built image to your Azure Container Registry with the dynamic tag.
+
+Deploy to Kubernetes: Use the Kubernetes task to deploy the Docker image to your AKS cluster, using the tag set earlier.
+
+Key Points in Classic Pipeline:
+
+Variables: 
+
+Classic pipelines allow you to set variables through the UI as well. 
+You can also use variable groups for centralized management of variables like acrName, projectName, etc.
+
+Dynamic Variables: 
+
+In Classic, you can use the ##vso[task.setvariable] script to set variables dynamically as part of your pipeline execution, 
+which is similar to what we did in the YAML pipeline.
+Service Connections: You’ll need to set up service connections for Azure Container Registry (ACR) and Kubernetes (AKS). 
+These are managed through Project Settings > Service Connections.
