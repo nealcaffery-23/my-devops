@@ -91,6 +91,10 @@ App gateway multisite:
 
 https://www.youtube.com/watch?v=X-4KSoe9Kt8
 
+DNS Zone ( domain url for the public IP ):
+
+https://www.youtube.com/watch?v=hTWX7YnkCGs
+
 ____________________
 
 prometheus:
