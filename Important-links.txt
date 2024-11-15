@@ -130,4 +130,20 @@ Azure Multifactor Authentication:
 
 https://www.youtube.com/watch?v=mrLfFiBbXl0
 
+_____________________
 
+Azure Service Connection: with Kubernetes
+
+https://www.youtube.com/watch?v=ORFWrBFwlps
+
+______________________
+
+Azure docker Build and deploy to AKS step by step:
+
+https://www.youtube.com/watch?v=tRjhTcXMAbo
+
+In self-hosted agent:
+
+https://www.youtube.com/watch?v=69PMI_c7vs4
+
+_____________________
