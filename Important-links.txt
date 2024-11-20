@@ -147,3 +147,6 @@ In self-hosted agent:
 https://www.youtube.com/watch?v=69PMI_c7vs4
 
 _____________________
+
+Azure AKS Istio service mesh setup:
+
