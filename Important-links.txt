@@ -150,3 +150,5 @@ _____________________
 
 Azure AKS Istio service mesh setup:
 
+https://www.youtube.com/watch?v=eSNetKBe7Z8
+
