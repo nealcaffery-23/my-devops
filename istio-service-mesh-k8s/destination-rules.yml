@@ -7,6 +7,9 @@ spec:
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL        # Use mTLS for outbound traffic
+      clientCertificate: "/etc/certs/client-cert.pem"
+      privateKey: "/etc/certs/client-key.pem"
+      caCertificates: "/etc/certs/ca-cert.pem"
   subsets:
     - name: v1
       labels:
