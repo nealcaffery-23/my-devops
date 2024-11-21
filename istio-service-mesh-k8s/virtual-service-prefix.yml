@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: uri-prefix-routing
+spec:
+  hosts:
+    - my-service
+  http:
+    - match:
+        - uri:
+            prefix: "/admin"
+      route:
+        - destination:
+            host: my-service
+            subset: v2
+    - match:
+        - uri:
+            prefix: "/user"
+      route:
+        - destination:
+            host: my-service
+            subset: v1

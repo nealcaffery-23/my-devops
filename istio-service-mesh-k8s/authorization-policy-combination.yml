@@ -1,0 +1,18 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: payment-service-path-method-policy
+  namespace: my-namespace
+spec:
+  selector:
+    matchLabels:
+      app: payment-service   # Apply to the payment-service workload
+  rules:
+    # Rule 1: Allow POST on '/payments' only for 'admin' users
+    - to:
+        - operation:
+            methods: ["POST"]  # Only POST method
+            paths: ["/payments/*"]  # Path should start with '/payments'
+      when:
+        - key: request.headers["x-user"]
+          values: ["admin"]  # Only allow 'admin' users to make POST requests to '/payments'

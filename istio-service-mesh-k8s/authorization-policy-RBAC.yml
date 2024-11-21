@@ -1,0 +1,25 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: payment-service-rbac-policy
+  namespace: my-namespace
+spec:
+  selector:
+    matchLabels:
+      app: payment-service   # Applies to the 'payment-service' workload
+  rules:
+    # Rule 1: Allow GET method for all users (read access)
+    - to:
+        - operation:
+            methods: ["GET"]   # Allow all GET requests (read access)
+      when:
+        - key: request.headers["x-user"]
+          values: ["*"]        # Any value for x-user header is allowed
+
+    # Rule 2: Allow POST method only for 'admin' users (write access)
+    - to:
+        - operation:
+            methods: ["POST"]  # Restrict POST to 'admin' users only
+      when:
+        - key: request.headers["x-user"]
+          values: ["admin"]    # Only allow POST for users with 'x-user: admin' header

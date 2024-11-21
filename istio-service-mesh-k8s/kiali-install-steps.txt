@@ -1,0 +1,149 @@
+Install Using Kiali Operator:
+
+Kiali can be installed using the Kiali Operator, which helps manage the lifecycle of Kiali in your cluster. To do this, follow these steps:
+
+Install Kiali Operator:
+
+#########
+
+kubectl apply -f https://github.com/kiali/kiali-operator/releases/download/v1.43.0/kiali-operator.yaml
+
+##########
+
+This will install the Kiali Operator in your cluster.
+
+Deploy Kiali Custom Resource:
+
+Create a custom resource (CR) to deploy Kiali using the operator:
+
+##############
+
+kubectl apply -f - <<EOF
+apiVersion: operator.kiali.io/v1alpha1
+kind: Kiali
+metadata:
+  name: kiali
+  namespace: istio-system
+spec:
+  auth:
+    strategy: login
+EOF
+
+############
+
+This will deploy Kiali in the istio-system namespace with the login authentication strategy.
+
+Check the Status:
+
+You can check if Kiali is running with:
+
+##############
+
+kubectl get pods -n istio-system
+
+#############
+
+If Kiali is running, you should see it listed under pods.
+
+Step 3: Access the Kiali Dashboard
+
+Once Kiali is installed, you can access its dashboard to monitor the service mesh.
+
+Port Forward to Access Kiali Locally:
+
+You can access Kiali via port forwarding if you don't have a LoadBalancer or Ingress set up:
+
+###########
+
+kubectl port-forward svc/kiali 20001:20001 -n istio-system
+
+##########
+
+This will forward port 20001 on your local machine to port 20001 of the Kiali service running in the istio-system namespace.
+
+Access Kiali Dashboard:
+
+Open your browser and navigate to:
+
+############
+
+http://localhost:20001
+
+###########
+
+You will be prompted for credentials based on the authentication strategy you set (in this case, login).
+
+_____________________________________________________________________________________________________
+
+
+
+Using HELM:
+
+
+Using Helm to Install Kiali
+
+To install Kiali using Helm and enable it with a specific configuration, you would typically follow these steps:
+
+Step 1: Add the Kiali Helm Chart Repository
+
+First, you need to add the Kiali Helm repository to your Helm configuration.
+
+##########
+
+helm repo add kiali https://kiali.org/helm-charts
+helm repo update
+
+#########
+
+This adds the Kiali repository and updates the local cache.
+
+Step 2: Install Kiali using Helm
+
+Now, you can install Kiali using the Helm command, where --set kiali.enabled=true enables Kiali in the installation configuration. You can specify various values for the installation.
+
+For example, to install Kiali with default settings in the istio-system namespace:
+
+###########
+
+helm install kiali kiali/kiali-server --namespace istio-system --set kiali.enabled=true
+
+##########
+
+In this command:
+
+helm install installs the package.
+kiali/kiali-server refers to the Helm chart for Kiali.
+--namespace istio-system specifies that Kiali should be installed in the istio-system namespace.
+--set kiali.enabled=true explicitly enables Kiali in the Helm chart configuration
+(this is useful if you have a custom values file or
+if the chart is pre-configured to disable Kiali by default).
+
+Step 3: Verify the Installation
+
+Once the command completes, you can verify the installation by checking if the Kiali pods are running in the istio-system namespace:
+
+#############
+
+kubectl get pods -n istio-system
+
+############
+
+You should see something like:
+
+#########
+
+kiali-<pod-id>   1/1   Running   0    <time>
+
+##########
+
+Step 4: Access the Kiali Dashboard
+You can access the Kiali dashboard using port forwarding:
+
+##########
+
+kubectl port-forward svc/kiali 20001:20001 -n istio-system
+
+##########
+
+After this, you can visit the Kiali dashboard at http://localhost:20001.
+

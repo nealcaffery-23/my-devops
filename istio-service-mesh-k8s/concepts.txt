@@ -1,0 +1,140 @@
+Here's a complete example that demonstrates the usage of Ingress Gateway, 
+VirtualService (with match conditions) and DestinationRule together.
+
+Scenario:
+
+You have a microservice called payment-service with two versions (v1 and v2).
+
+You want to:
+
+Expose payment-service to external clients via an Ingress Gateway at the domain payment.example.com.
+Route traffic based on a header condition:
+
+If the header version: v2 is present, route the traffic to version v2.
+Otherwise, route the traffic to version v1.
+
+Use DestinationRule to define subsets v1 and v2 for the service.
+
+Step 1: Gateway Definition
+
+The Ingress Gateway exposes the service to the outside world, 
+listening for HTTP traffic on port 80.
+
+##############
+
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: payment-gateway
+spec:
+  selector:
+    istio: ingressgateway # Use the default Istio ingress gateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "payment.example.com"
+
+##############
+
+Step 2: VirtualService with Match Conditions:
+
+The VirtualService links the Gateway to the service and defines routing logic based on the header version.
+
+##############
+
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: payment-service
+spec:
+  hosts:
+    - "payment.example.com" # Host exposed by the Gateway
+  gateways:
+    - payment-gateway       # Link to the Gateway
+  http:
+    - match:                # Match requests with header `version: v2`
+        - headers:
+            version:
+              exact: "v2"
+      route:
+        - destination:
+            host: payment-service
+            subset: v2      # Route to version v2
+          weight: 100
+
+    - route:                # Default route for other requests
+        - destination:
+            host: payment-service
+            subset: v1      # Route to version v1
+          weight: 100
+
+##################
+
+
+Step 3: DestinationRule for Subsets:
+
+The DestinationRule defines subsets v1 and v2 for payment-service, based on Kubernetes labels.
+
+#############
+
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: payment-service
+spec:
+  host: payment-service
+  subsets:
+    - name: v1               # Subset for version v1
+      labels:
+        version: v1
+    - name: v2               # Subset for version v2
+      labels:
+        version: v2
+
+#################  
+
+How It Works
+
+Ingress Gateway:
+
+Accepts external traffic at payment.example.com.
+Forwards traffic to the linked VirtualService.
+
+VirtualService:
+
+Inspects each incoming request for the header version: v2.
+If the header matches, routes traffic to payment-service subset v2.
+If no match, traffic is routed to the default subset v1.
+
+DestinationRule:
+
+Defines the subsets v1 and v2, which are linked to specific versions of the payment-service pods (via Kubernetes labels).
+Testing the Configuration
+Route to Version v2: Send a request with the header version: v2:
+
+########
+
+curl -H "version: v2" http://payment.example.com
+
+########
+
+Traffic is routed to v2.
+Default Route to Version v1: Send a request without the header:
+
+#########
+
+curl http://payment.example.com
+
+#########
+Traffic is routed to v1.
+
+Summary:
+
+The Gateway exposes payment-service to external traffic.
+The VirtualService uses match conditions (header version) to route traffic.
+The DestinationRule maps subsets (v1 and v2) to different versions of the service.
+This is a complete and practical example of using all three Istio components.
+Let me know if you have further questions!

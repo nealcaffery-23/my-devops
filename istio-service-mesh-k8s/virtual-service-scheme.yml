@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: scheme-based-routing
+spec:
+  hosts:
+    - my-service
+  http:
+    - match:
+        - scheme:
+            exact: https
+      route:
+        - destination:
+            host: my-service
+            subset: v2
+    - match:
+        - scheme:
+            exact: http
+      route:
+        - destination:
+            host: my-service
+            subset: v1

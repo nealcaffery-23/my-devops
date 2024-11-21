@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: authority-based-routing
+spec:
+  hosts:
+    - "*.mydomain.com"
+  http:
+    - match:
+        - authority:
+            exact: "admin.mydomain.com"
+      route:
+        - destination:
+            host: my-service
+            subset: v2
+    - match:
+        - authority:
+            exact: "api.mydomain.com"
+      route:
+        - destination:
+            host: my-service
+            subset: v1

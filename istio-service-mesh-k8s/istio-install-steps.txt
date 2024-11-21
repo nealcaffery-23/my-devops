@@ -1,0 +1,162 @@
+Step 1: Install Istio CLI
+
+Download Istio CLI:
+
+Visit the Istio releases page to download the Istio CLI for your operating system.
+
+For example, on macOS, you can run:
+
+##########
+
+curl -L https://istio.io/downloadIstio | sh -
+
+##########
+This command will download and install Istio in your home directory. 
+
+After the download, you'll find the istioctl binary inside the istio-* directory.
+
+Add Istio CLI to PATH:
+
+To use Istio CLI globally, you should add it to your PATH:
+
+#########
+
+export PATH=$PWD/istio-*/bin:$PATH
+
+#########
+
+Verify Installation:
+
+After adding istioctl to your path, verify the installation by running:
+#########
+istioctl version
+#########
+This should output the Istio version installed.
+
+Step 2: Install Istio on Kubernetes
+
+Install Istio Using Istio CLI:
+
+Istio provides a number of installation options. 
+The easiest way is to use the istioctl command.
+Run the following command to install Istio with default settings:
+
+##########
+
+istioctl install --set profile=default -y
+
+##########
+
+This will install Istio in your Kubernetes cluster with the default profile. 
+The -y flag auto-approves all installation steps.
+
+Check Istio Components:
+
+After installation, verify that the Istio components are running:
+
+##########
+
+kubectl get pods -n istio-system
+
+##########
+
+You should see Istio components like istiod, istio-ingressgateway, istio-egressgateway, and others in the istio-system namespace.
+
+Step 3: Enable Istio Sidecar Injection
+
+Enable Namespace for Sidecar Injection:
+
+Istio injects sidecars (Envoy proxies) automatically into your Kubernetes workloads.
+
+To enable sidecar injection, you need to label the Kubernetes namespace where your services are running.
+
+Label your namespace with the following command (for example, using default namespace):
+
+###########
+
+kubectl label namespace default istio-injection=enabled
+
+###########
+
+This enables automatic sidecar injection for any new pods in the default namespace.
+
+Verify Sidecar Injection:
+
+Deploy a sample application to verify that the Istio sidecar is injected.
+
+For example, deploy a sample app like bookinfo:
+
+#########
+
+kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+
+#########
+After the deployment, check that the sidecar is injected by inspecting the pods:
+
+###########
+
+kubectl get pods -n default
+
+##########
+
+You should see two containers per pod (your application container and the Istio sidecar container), for example:
+
+#########
+
+NAME                              READY   STATUS    RESTARTS   AGE
+productpage-v1-5d5b7b7d7d-6nv8d    2/2     Running   0          10s
+
+#########
+The READY column will show 2/2, indicating that both the application and the sidecar are running.
+
+Step 4: (Optional) Enable Istio Ingress Gateway:
+
+Deploy Ingress Gateway: If you want to expose your services outside the cluster using an Istio ingress gateway, you need to deploy the ingress gateway.
+
+Istio comes with an ingress gateway, and you can expose it as a LoadBalancer or NodePort service.
+
+##########
+
+kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
+
+##########
+
+Verify Ingress Gateway:
+
+After deploying the gateway, check that the ingress gateway is running:
+
+##########
+
+kubectl get svc -n istio-system
+
+###########
+
+Look for the istio-ingressgateway service, which should have an external IP if you're using a LoadBalancer, or a port number if you're using NodePort.
+
+Step 5: Test the Istio Setup
+
+Check Access to the Application:
+
+If you're using the ingress gateway and have configured a gateway resource like in the bookinfo-gateway.yaml, 
+you can access the application via the external IP or the node port.
+For LoadBalancer setup, you can check the external IP:
+
+##########
+
+kubectl get svc -n istio-system
+
+##########
+
+In your browser, go to the external IP (or NodePort) and verify that the application is accessible.
+
+or with Cluster IP, try port forwarding:
+
+#########
+
+kubectl port-forward service/<service-name> 8080:80 -n default
+
+kubectl port-forward pod/<pod-name> 8080:80 -n default
+
+##########
+
+and access with "http://localhost:8080"
