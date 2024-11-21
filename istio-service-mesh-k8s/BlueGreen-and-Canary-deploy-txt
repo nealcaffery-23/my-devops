@@ -1,0 +1,161 @@
+Blue-Green Deployment Example
+Blue-green deployment involves running two environments, blue (current version) and green (new version), in parallel. Initially, all traffic routes to the blue environment. Once the green environment is verified, traffic is switched entirely to green.
+
+Blue-Green Example with Istio VirtualService
+Assume:
+
+Blue version is v1.
+Green version is v2.
+Initial State (All Traffic to Blue/v1):
+
+##############
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: payment-service
+spec:
+  hosts:
+    - payment-service
+  http:
+    - route:
+        - destination:
+            host: payment-service
+            subset: v1
+          weight: 100
+        - destination:
+            host: payment-service
+            subset: v2
+          weight: 0
+#################
+
+Final State (Switch All Traffic to Green/v2):
+
+#################
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: payment-service
+spec:
+  hosts:
+    - payment-service
+  http:
+    - route:
+        - destination:
+            host: payment-service
+            subset: v1
+          weight: 0
+        - destination:
+            host: payment-service
+            subset: v2
+          weight: 100
+##################
+
+Steps for Blue-Green Deployment:
+
+Deploy both v1 and v2 services.
+Initially, route all traffic to v1.
+Test the v2 environment (green) using a separate URL or internal testing mechanisms.
+Once verified, gradually shift traffic by updating weights or switch all traffic to v2.
+Delete v1 when no longer needed.
+Canary Deployment Example
+Canary deployment involves incrementally shifting traffic to a new version (e.g., v2) while monitoring for issues. If any problems arise, rollback is possible.
+
+Canary Example with Istio VirtualService
+Assume:
+
+Current stable version is v1.
+Canary version is v2.
+Step 1: Start with Small Traffic to Canary/v2
+
+####################
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: payment-service
+spec:
+  hosts:
+    - payment-service
+  http:
+    - route:
+        - destination:
+            host: payment-service
+            subset: v1
+          weight: 90
+        - destination:
+            host: payment-service
+            subset: v2
+          weight: 10
+######################
+
+Step 2: Gradually Increase Traffic to Canary/v2
+
+########################
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: payment-service
+spec:
+  hosts:
+    - payment-service
+  http:
+    - route:
+        - destination:
+            host: payment-service
+            subset: v1
+          weight: 50
+        - destination:
+            host: payment-service
+            subset: v2
+          weight: 50
+###########################
+
+Step 3: Shift All Traffic to Canary/v2
+
+#####################
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: payment-service
+spec:
+  hosts:
+    - payment-service
+  http:
+    - route:
+        - destination:
+            host: payment-service
+            subset: v1
+          weight: 0
+        - destination:
+            host: payment-service
+            subset: v2
+          weight: 100
+########################
+
+Steps for Canary Deployment
+
+Deploy v2 alongside v1.
+Start with a small percentage of traffic to v2 (e.g., 10%).
+Gradually increase the traffic to v2 in steps (e.g., 25%, 50%, etc.).
+Monitor metrics, logs, and user feedback after each step.
+If no issues are detected, route 100% of traffic to v2.
+Rollback to v1 if any problems arise.
+DestinationRule for Both Scenarios
+For either blue-green or canary deployments, the DestinationRule must define subsets for v1 and v2:
+
+################
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: payment-service
+spec:
+  host: payment-service
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+    - name: v2
+      labels:
+        version: v2
+####################
