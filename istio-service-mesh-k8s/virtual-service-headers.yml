@@ -1,0 +1,25 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: payment-service
+spec:
+  hosts:
+    - "payment.example.com" # Host exposed by the Gateway
+  gateways:
+    - payment-gateway       # Link to the Gateway
+  http:
+    - match:                # Match requests with header `version: v2`
+        - headers:
+            version:
+              exact: "v2"
+      route:
+        - destination:
+            host: payment-service
+            subset: v2      # Route to version v2
+          weight: 100
+
+    - route:                # Default route for other requests
+        - destination:
+            host: payment-service
+            subset: v1      # Route to version v1
+          weight: 100
